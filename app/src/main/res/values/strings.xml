@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Gastronomad 2</string>
+    <string name="email">Email</string>
+    <string name="password">Sifra</string>
+    <string name="confirm_password">Potvrdi sifru</string>
+    <string name="sign_up">Napravite nalog</string>
+    <string name="log_in">Prijavite se</string>
+    <string name="sign_up_description">Napravite nalog</string>
+    <string name="kratka_sifra">"Lozinka mora sadržati bar 8 karaktera! "</string>
+    <string name="password_dont_match">\"Passwords do not match\"</string>
+    <string name="username">Username</string>
+    <string name="name">Ime</string>
+    <string name="surname">Prezime</string>
+    <string name="number">Broj telefona</string>
+    <string name="db_collection_users">users</string>
+    <string name="errMsg">ERROR</string>
+    <string name="confirm_email">Niste verifikovali nalog? Tapnite ovde!</string>
+    <string name="usernameTaken">Username is alredy taken</string>
+    <string name="changeProfilePic">Choose profile picture</string>
+    <string name="continue_as_guest">Nastavite kao gost</string>
+    <string name="postaviteVreme">Postavite vreme oglasavanja</string>
+    <string name="postavitePoruku">Postavite poruku za prikaz</string>
+    <string name="maksimalno50">Maksimalno 50 karaktera</string>
+    <string name="predugaPoruka">Poruka je preduga</string>
+    <string name="cancel">Cancel</string>
+    <string name="OK">OK</string>
+    <string name="message">Message: </string>
+    <string name="date">Date: </string>
+    <string name="event">Event:</string>
+    <string name="next">Dalje</string>
+    <string name="back">Nazad</string>
+</resources>

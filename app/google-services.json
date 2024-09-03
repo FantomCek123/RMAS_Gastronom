@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "83340195007",
+    "project_id": "gastronomad-2",
+    "storage_bucket": "gastronomad-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83340195007:android:23c2ef48f25b01c0ee420a",
+        "android_client_info": {
+          "package_name": "com.example.gastronomad2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1LgcW01JYv1d3Byz4YRUrHCf6xRqL6N4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
