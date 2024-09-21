@@ -22,7 +22,7 @@ class CurrentUserInfo private constructor() {
         }
     }
 
-    private var user : User? = null
+    var user : User? = null
     var signed = Firebase.auth.currentUser
 
     fun get() : User? {

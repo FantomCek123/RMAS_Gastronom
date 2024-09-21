@@ -1,8 +1,12 @@
 package com.example.gastronomad2.ui.screens.profile
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.collection.emptyLongSet
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -28,11 +32,13 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,10 +49,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.gastronomad2.models.entities.Screen
+import com.example.gastronomad2.servises.implementations.CurrentUserInfo
 import com.example.gastronomad2.ui.screens.components.NavigationBar
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(DelicateCoroutinesApi::class)
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -57,8 +65,9 @@ fun DrawProfilePage(
     navBar: NavigationBar,
     dppvm: DrawProfilePageViewModel = DrawProfilePageViewModel.getInstance()
 ) {
-    dppvm.loadProfilePicture()
 
+    dppvm.loadProfilePicture()
+    dppvm.setInfoForUser()
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -102,7 +111,7 @@ fun DrawProfilePage(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
                 ) {
-                    dppvm.currentUserInfo?.userName?.let {
+                    dppvm.currentUserInfo.value?.userName?.let {
                         Text(
                             text = it,
                             style = MaterialTheme.typography.headlineSmall,
@@ -122,7 +131,7 @@ fun DrawProfilePage(
                         .padding(horizontal = 24.dp),
                 ) {
                     Text(
-                        text = "Ime: " + dppvm.currentUserInfo?.firstName,
+                        text = "Ime: " + dppvm.currentUserInfo.value?.firstName,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.weight(1f),
                     )
@@ -142,7 +151,7 @@ fun DrawProfilePage(
                             .padding(horizontal = 24.dp)
                     ) {
                         Text(
-                            text = "Prezime: " + dppvm.currentUserInfo?.lastName,
+                            text = "Prezime: " + dppvm.currentUserInfo.value?.lastName,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.weight(1f),
                         )
@@ -199,15 +208,18 @@ fun DrawProfilePage(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
                 ) {
-                    RadioButton(selected = dppvm.selected.value, onClick = {
-                        dppvm.selected.value = !dppvm.selected.value
-                        //setForground()
-                    })
-                    Text(
-                        text = "Omoguci pracenje:",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.clickable { navController.navigate(Screen.MyRestaurants.name) }
-                    )
+                    Button(
+                        onClick = {
+                            dppvm.isServiceActive = !dppvm.isServiceActive
+                            dppvm.setLocationService(context)
+                        },
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        if(dppvm.isServiceActive)
+                            Text("Stop service")
+                        else
+                            Text(text = "Start service")
+                    }
                 }
 
                 Button(
@@ -220,6 +232,8 @@ fun DrawProfilePage(
                             },
                             onError = { /* Handle error */ }
                         )
+                        //CurrentUserInfo.getInstance().user = null
+                        //dppvm.currentUserInfo.value = null
                     },
                     modifier = Modifier.padding(16.dp)
                 ) {

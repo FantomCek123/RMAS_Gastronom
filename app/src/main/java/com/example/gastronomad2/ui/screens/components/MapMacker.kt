@@ -3,6 +3,7 @@ package com.example.gastronomad2.ui.screens.components
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -11,7 +12,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.gastronomad2.models.entities.Restaurant
 import com.example.gastronomad2.models.entities.Screen
+import com.example.gastronomad2.servises.implementations.CurrentUserInfo
+import com.example.gastronomad2.servises.implementations.LocationService.Companion.locationUpdates
 import com.example.gastronomad2.ui.screens.createRestaurant.CreateRestaurantViewModel
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
@@ -26,7 +30,9 @@ import com.google.maps.android.compose.MarkerState
 fun AddRestaurantLocationMap(
     onMapLongClick:(LatLng)->Unit,
 ){
-    val crvm = CreateRestaurantViewModel.getInstance()
+
+    val currentLocation by locationUpdates.collectAsState()
+
     val uiSettings by remember { mutableStateOf(
         MapUiSettings(
         zoomControlsEnabled = true,
@@ -47,7 +53,7 @@ fun AddRestaurantLocationMap(
         mutableStateOf(
             CameraPositionState(
                 CameraPosition(
-                    LatLng(crvm.lat!!.doubleValue, crvm.lng!!.doubleValue),
+                    LatLng(currentLocation!!.latitude, currentLocation!!.longitude),
                     15f,
                     0f,
                     0f
@@ -66,7 +72,10 @@ fun AddRestaurantLocationMap(
     )
 }
 @Composable
-fun NewRestaurantLocationPreviewMap(navController: NavController, crvm: CreateRestaurantViewModel) {
+fun NewRestaurantLocationPreviewMap(navController: NavController, title: String) {
+
+    val currentLocation by locationUpdates.collectAsState()
+
     val uiSettings by remember {
         mutableStateOf(
             MapUiSettings(
@@ -95,7 +104,7 @@ fun NewRestaurantLocationPreviewMap(navController: NavController, crvm: CreateRe
         mutableStateOf(
             CameraPositionState(
                 CameraPosition(
-                    LatLng(crvm.lat!!.doubleValue, crvm.lng!!.doubleValue),
+                    LatLng(currentLocation!!.latitude, currentLocation!!.longitude),
                     15f,
                     0f,
                     0f
@@ -114,15 +123,22 @@ fun NewRestaurantLocationPreviewMap(navController: NavController, crvm: CreateRe
         onMapLongClick = { navController.navigate(Screen.AddRestaurantMapLocation.name) }
     ) {
         Marker(
-            state = MarkerState(LatLng(crvm.lat!!.doubleValue, crvm.lng!!.doubleValue)),
-            title = crvm.title.value, // Naslov koji korisnik unosi
+            state = MarkerState(LatLng(currentLocation!!.latitude, currentLocation!!.longitude)),
+            title = title, // Naslov koji korisnik unosi
             // snippet = cevm.description.value // Snipet koji korisnik unosi
+            icon = BitmapDescriptorFactory.defaultMarker(
+                BitmapDescriptorFactory.HUE_BLUE
+            )
         )
     }
 }
 
 @Composable
 fun RestaurantLocationPreviewMap(restaurant: Restaurant, Height:Int = 250){
+
+    val currentLocation by locationUpdates.collectAsState()
+
+
     val uiSettings by remember { mutableStateOf(
         MapUiSettings(
         zoomControlsEnabled = true,
@@ -165,7 +181,13 @@ fun RestaurantLocationPreviewMap(restaurant: Restaurant, Height:Int = 250){
     ){
         Marker(
             state = MarkerState(LatLng(restaurant.geoLocation!!.latitude, restaurant.geoLocation.longitude)),
-            //title = Marker
+            title = restaurant.title,
+            icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
+        )
+
+        Marker(
+            state = MarkerState(position = LatLng(currentLocation!!.latitude, currentLocation!!.longitude)),
+            title = "You"
         )
     }
 }

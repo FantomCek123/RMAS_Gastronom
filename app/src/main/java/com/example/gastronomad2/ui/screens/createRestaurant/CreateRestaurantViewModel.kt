@@ -101,4 +101,6 @@ class CreateRestaurantViewModel private constructor(): GastonomadAppViewModel() 
         lng!!.value = latLng.longitude
     }
 
+
+
 }

@@ -37,6 +37,7 @@ import com.example.gastronomad2.ui.screens.filteredRestaurants.DrawFilteredResta
 import com.example.gastronomad2.ui.screens.filters.DrawFilterPage
 import com.example.gastronomad2.ui.screens.myRestaurants.DrawMyRestaurants
 import com.example.gastronomad2.ui.screens.profile.DrawProfilePage
+import com.example.gastronomad2.ui.screens.profile.DrawProfilePageViewModel
 import com.example.gastronomad2.ui.screens.restaurantDetails.DrawRestaurantPage
 import com.example.gastronomad2.ui.screens.restaurantDetails.RestaurantPageViewModel
 import com.example.gastronomad2.ui.screens.splash.SplashScreen
@@ -48,7 +49,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /////// ZA PRACENJE KKORISNIKA ///////////////
         ActivityCompat.requestPermissions(
             this,
             arrayOf(
@@ -59,40 +59,10 @@ class MainActivity : ComponentActivity() {
             0
         )
 
-        Intent(applicationContext, LocationService::class.java).apply {
+        Intent(this, LocationService::class.java).apply {
             action = LocationService.ACTION_START
             startService(this)
         }
-        /////// ZA PRACENJE KKORISNIKA ///////////////
-
-
-        ///////////// TEST /////////////// RADI
-/*
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val chanel = NotificationChannel(
-                "running_channel",
-                "Running Notification",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            val notificationMenager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationMenager.createNotificationChannel(chanel)
-        }
-
-
-        if(!isForgroundActive.value)
-            Intent(applicationContext, RunningService::class.java).apply {
-                action = RunningService.START
-                startService(this)
-            }
-
-        else{
-            Intent(applicationContext, RunningService::class.java).apply {
-                action = RunningService.STOP
-                startService(this)
-            }
-        }
-        ///////////// TEST ///////////////
-*/
 
         enableEdgeToEdge()
         setContent {

@@ -27,8 +27,6 @@ import com.example.gastronomad2.servises.implementations.CurrentUserInfo
 
 class NavigationBar(
     private val navigateToHomePage: () -> Unit,
-   // private val navigateToSearchPage: () -> Unit,
-    //private val navigateToEventRemindersPage: () -> Unit,
     private val navigateToFilterPage: () -> Unit,
     private val navigateToProfilePage: () -> Unit
 ) {
@@ -37,7 +35,7 @@ class NavigationBar(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 45.dp)
+                .padding(bottom = 25.dp)
                 .drawBehind {
                     val borderSize = 2.dp.toPx()
                     drawLine(

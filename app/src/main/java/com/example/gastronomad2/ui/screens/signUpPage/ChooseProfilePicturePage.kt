@@ -40,7 +40,6 @@ import com.example.gastronomad2.models.entities.Screen
 import com.example.gastronomad2.ui.screens.signInPage.SignInViewModel
 import com.example.gastronomad2.ui.theme.Purple40
 
-// pushovano sa petrovicfilip jer meni ne radi!
 @Composable
 fun DrawChooseProfilePicturePage(
     navController: NavController,

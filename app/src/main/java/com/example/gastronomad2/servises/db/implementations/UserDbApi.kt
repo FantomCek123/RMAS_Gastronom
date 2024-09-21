@@ -12,6 +12,7 @@ import kotlinx.coroutines.tasks.await
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -74,15 +75,25 @@ class UserDbApi {
         return user
     }
 
+     fun update(id: String, userField: String, newValue: Any): Boolean {
+        var result: Boolean = true
+        com.google.firebase.Firebase.firestore.collection("user").document(id).update(userField, newValue)
+            .addOnFailureListener { ex ->
+                Log.d("USER_DB_DELETE", "DELETE FAILED WITH ", ex)
+                result = false
+            }
+        return result
+    }
+
     suspend fun getUserWithUsername2(username:String):List<User> {
         val querySnapshot = userRoot
             .whereEqualTo("userName", username)
             .get()
             .await()
         return querySnapshot.documents.mapNotNull { it.toObject<User>() }
-
-
     }
+
+
 
     suspend fun getUserWithEmail(email:String):List<User> {
         val querySnapshot = userRoot
@@ -119,6 +130,19 @@ class UserDbApi {
                 }.addOnFailureListener {
                     Log.e("RESTORANI_DOWNLOAD", it.message ?: "Nema poruke o gresci")
                 }
+        }
+    }
+
+    suspend fun getTopUsersByPoints(limit: Int = 20): List<User> {
+        return try {
+            val querySnapshot = userRoot.get().await()
+            val users = querySnapshot.documents.mapNotNull { it.toObject<User>() }
+
+            val sortedUsers = users.sortedByDescending { it.points }
+
+            sortedUsers.take(limit)
+        } catch (e: Exception) {
+            emptyList() // Vraća praznu listu u slučaju greške
         }
     }
 }

@@ -58,6 +58,7 @@ import androidx.navigation.NavController
 import com.example.gastronomad2.models.entities.RestaurantType
 import com.example.gastronomad2.models.entities.Screen
 import com.example.gastronomad2.ui.screens.components.NavigationBar
+import com.example.gastronomad2.ui.screens.components.NumberSelector
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -210,7 +211,7 @@ fun DrawFilterPage(
                     }
                 }
             }
-            DateRangePickerScreen(dateRangePickerState)
+            NumberSelector()
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center

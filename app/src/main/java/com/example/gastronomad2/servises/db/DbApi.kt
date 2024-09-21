@@ -82,7 +82,7 @@ class DbApi {
     }
 
     fun addRestaurant(
-        publisherId: String? = "",
+        publisherId: String = "",
         title: String = "",
         location: String = "",
         description: String = "",
@@ -107,6 +107,8 @@ class DbApi {
         runBlocking {
             id = async { this@DbApi.rdbApi.add(restaurant) }.await()
         }
+
+        users.update(publisherId,"points",CurrentUserInfo.getInstance().get()!!.points + 20)
         return id
     }
 
@@ -139,6 +141,12 @@ class DbApi {
         }
     }
 
+    fun updateUser(id: String, userField: String, newValue: Any) {
+        GlobalScope.launch {
+            users.update(id,userField,newValue)
+        }
+    }
+
     fun addComment(id: String? = null, restaurantId: String = "", title: String = "", text: String = "",username: String = ""
     ) : String {
         var newCommentId : String = ""
@@ -153,6 +161,8 @@ class DbApi {
         runBlocking {
             newCommentId = cdbApi.add(id, comment)
             }
+        users.update(CurrentUserInfo.getInstance().get()!!.id,"points",CurrentUserInfo.getInstance().get()!!.points + 1)
+
         return newCommentId
     }
 
@@ -171,6 +181,7 @@ class DbApi {
 
             rdbApi.update(restaurantId, "numOfRates", restaurant!!.numOfRates + 1)
             rdbApi.update(restaurantId, "rating", newRating)
+            users.update(CurrentUserInfo.getInstance().get()!!.id,"points",CurrentUserInfo.getInstance().get()!!.points + 5)
         }
     }
     fun getRestaurantsWithTitle(title:String?):List<Restaurant?>
@@ -198,6 +209,23 @@ class DbApi {
             evs = async { rdbApi.findRestaurantsWhitTypes(types) }.await()
         }
         return evs
+    }
+
+    fun getTopUsersByPoints() : List<User?>
+    {
+        var usersList: List<User?> = emptyList()
+        runBlocking{
+            usersList = async { users.getTopUsersByPoints() }.await()
+        }
+        return usersList
+    }
+
+    fun getNearbyRestaurants(lat:Double, lng:Double, redius:Double) : List<Restaurant> {
+        var restaurantList: List<Restaurant> = emptyList()
+        runBlocking {
+            restaurantList = rdbApi.giveAllNearbyRestaurants(lat, lng, redius)
+        }
+        return restaurantList
     }
 
 }

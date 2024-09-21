@@ -89,4 +89,11 @@ class SignInViewModel private constructor(
             }
         }
     }
+
+    fun resetEmailAndPassword()
+    {
+        email.value = ""
+        password.value = ""
+        _passwordVisible.value = false
+    }
 }

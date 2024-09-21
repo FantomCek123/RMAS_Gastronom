@@ -6,6 +6,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
+import kotlin.math.cos
 
 class RestaurantDbApi {
 
@@ -16,9 +17,9 @@ class RestaurantDbApi {
 
         var restaurantId = ""
 
-        val eventRef = Firebase.firestore.collection("restaurant").add(restaurant).await()
+        val restaurantRef = Firebase.firestore.collection("restaurant").add(restaurant).await()
 
-        restaurantId = eventRef.id
+        restaurantId = restaurantRef.id
 
         Firebase.firestore.collection("restaurant")
             .document(restaurantId)
@@ -93,7 +94,6 @@ class RestaurantDbApi {
         if (rating != null && rating > 0.0 && rating < 10.0) {
             val querySnapshot = Firebase.firestore.collection("restaurant")
                 .whereGreaterThanOrEqualTo("rating", rating)
-                //.whereGreaterOThan("rating", rating)
                 .get()
                 .await()
             return querySnapshot.documents.mapNotNull { it.toObject<Restaurant>() }
@@ -117,6 +117,47 @@ class RestaurantDbApi {
         }
     }
 
+    suspend fun giveAllNearbyRestaurants(lat: Double, lng: Double, radius: Double): List<Restaurant> {
+        val radiusInKm = radius
+        val earthRadiusKm = 6371.0
+
+        val latDelta = Math.toDegrees(radiusInKm / earthRadiusKm)
+        val lngDelta = Math.toDegrees(radiusInKm / (earthRadiusKm * cos(Math.toRadians(lat))))
+
+        val minLat = lat - latDelta
+        val maxLat = lat + latDelta
+        val minLng = lng - lngDelta
+        val maxLng = lng + lngDelta
+
+        val nearRestaurants = mutableListOf<Restaurant>()
+
+        try {
+            // Awaiting the result from Firebase Firestore
+            val querySnapshot = Firebase.firestore.collection("restaurant")
+                .get()
+                .await()
+
+            for (document in querySnapshot.documents) {
+                val geoPoint = document.getGeoPoint("geoLocation")
+                if (geoPoint != null) {
+                    val pointLat = geoPoint.latitude
+                    val pointLng = geoPoint.longitude
+                    if (pointLat in minLat..maxLat && pointLng in minLng..maxLng) {
+                        // Pretpostavljamo da su podaci u dokumentu ispravno mapirani na klasu Restaurant
+                        val restaurant = document.toObject(Restaurant::class.java)
+                        if (restaurant != null) {
+                            nearRestaurants.add(restaurant)
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // Log or handle the exception as needed
+            e.printStackTrace()
+        }
+
+        return nearRestaurants
+    }
 
 
 }

@@ -53,7 +53,7 @@ fun DrawSignInPage(
     val email = sipvm.email.collectAsState()
     val password = sipvm.password.collectAsState()
     val passwordVisible = sipvm.passwordVisible.collectAsState()
-
+    sipvm.resetEmailAndPassword()
     Scaffold(
     ) { paddingValues ->
 
@@ -178,6 +178,7 @@ fun DrawSignInPage(
             TextButton(onClick = {
                 navController.popBackStack(Screen.SignIn.name, inclusive = false)
                 navController.navigate(Screen.SignUp.name)
+
             }) {
                 Text(text = stringResource(R.string.sign_up_description), fontSize = 16.sp)
             }

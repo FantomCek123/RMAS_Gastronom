@@ -310,7 +310,7 @@ fun DrawCreateRestaurantPage(
                             shape = RoundedCornerShape(12.dp)
                         )
                 ) {
-                    NewRestaurantLocationPreviewMap(navController, crvm)
+                    NewRestaurantLocationPreviewMap(navController, crvm.title.value)
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -331,12 +331,12 @@ fun DrawCreateRestaurantPage(
                                 crvm.selectedImagesUris.let {
                                     crvm.mDbApi.uploadRestaurantImages(it.value, uid, eid)
                                 }
+                                crvm.clearFields()
 
                                 navController.popBackStack(
                                     route = Screen.Profile.name,
                                     inclusive = false
                                 )
-                                crvm.clearFields()
                         }
                     },
                     modifier = Modifier.fillMaxWidth()

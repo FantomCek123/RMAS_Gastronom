@@ -12,7 +12,8 @@ data class User(
     val lastName:String = "",
     val number:String = "",
     val profilePicture:String = "",
-    val latLng: GeoPoint? = null
+    val latLng: GeoPoint? = null,
+    val points:Int = 0
 
 // val password: String = " Ne treba najverovatnije
 )

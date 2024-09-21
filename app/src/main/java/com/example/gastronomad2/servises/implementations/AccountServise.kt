@@ -1,14 +1,16 @@
 package com.example.gastronomad2.servises.implementations
 
+import android.content.Context
 import android.net.Uri
 import com.example.gastronomad2.models.entities.User
 import com.example.gastronomad2.servises.db.DbApi
 import com.example.gastronomad2.servises.db.implementations.MediaDbApi
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.GeoPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class AccountServise {
 
@@ -56,7 +58,13 @@ class AccountServise {
         return Firebase.auth.currentUser != null
     }
 
-    suspend fun signOut() {
+    suspend fun signOut(context: Context) {
+        CurrentUserInfo.getInstance().user = null
         Firebase.auth.signOut()
+        val packageName = context.packageName
+        val runtime = Runtime.getRuntime()
+        withContext(Dispatchers.IO) {
+ //           runtime.exec("pm clear $packageName")
+        }
     }
 }
