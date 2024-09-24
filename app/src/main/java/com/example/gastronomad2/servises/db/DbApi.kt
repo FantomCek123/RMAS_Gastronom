@@ -221,7 +221,7 @@ class DbApi {
     }
 
     fun getNearbyRestaurants(lat:Double, lng:Double, redius:Double) : List<Restaurant> {
-        var restaurantList: List<Restaurant> = emptyList()
+        var restaurantList: List<Restaurant>
         runBlocking {
             restaurantList = rdbApi.giveAllNearbyRestaurants(lat, lng, redius)
         }

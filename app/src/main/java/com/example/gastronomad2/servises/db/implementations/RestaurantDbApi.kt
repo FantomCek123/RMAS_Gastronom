@@ -156,7 +156,10 @@ class RestaurantDbApi {
             e.printStackTrace()
         }
 
+        if(nearRestaurants.isNotEmpty())
         return nearRestaurants
+
+        return emptyList()
     }
 
 

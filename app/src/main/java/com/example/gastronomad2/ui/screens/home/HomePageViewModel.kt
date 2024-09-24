@@ -38,6 +38,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -67,7 +68,7 @@ class HomePageViewModel private constructor() : GastonomadAppViewModel() {
 //        private set
     val dbApi:DbApi = DbApi()
 
-    var restaurants by mutableStateOf(listOf<Restaurant>())
+    var restaurants = mutableStateListOf<Restaurant>()
         private set
 
     fun setUsers() : List<User?>
@@ -83,9 +84,9 @@ class HomePageViewModel private constructor() : GastonomadAppViewModel() {
 
     fun getRestayrants()
     {
-
-        restaurants = dbApi.getNearbyRestaurants(currentLocation.value.value!!.latitude,
-            currentLocation.value.value!!.longitude,4.5)
+        restaurants.clear()
+        restaurants.addAll(dbApi.getNearbyRestaurants(currentLocation.value.value!!.latitude,
+            currentLocation.value.value!!.longitude,4.5))
     }
 
 

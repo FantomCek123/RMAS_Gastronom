@@ -44,6 +44,7 @@ import com.example.gastronomad2.servises.implementations.LocationService
 import com.example.gastronomad2.servises.implementations.LocationService.Companion.locationUpdates
 import com.example.gastronomad2.ui.screens.components.DisplayRatings
 import com.example.gastronomad2.ui.screens.components.NavigationBar
+import com.example.gastronomad2.ui.screens.profile.DrawProfilePageViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -80,6 +81,7 @@ fun DrawHomePage(
 
     hpvm.getRestayrants()
 
+
     Scaffold(
         bottomBar = {
             navBar.Draw(currentScreen = Screen.Home)
@@ -99,6 +101,7 @@ fun DrawHomePage(
                     modifier = Modifier.fillMaxSize(),
                     cameraPositionState = cameraPositionState
                 ) {
+
                     currentLocation?.let {
                         Marker(
                             state = MarkerState(position = LatLng(it.latitude, it.longitude)),

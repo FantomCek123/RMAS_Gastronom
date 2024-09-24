@@ -62,6 +62,8 @@ class DrawProfilePageViewModel private constructor() : GastonomadAppViewModel() 
                 onError(e)
             }
         }
+        profilna = null
+        isProfilePictureLoaded = false
     }
 
     private fun clearAppData(context: Context) { // Dodata funkcija za brisanje podataka aplikacije
@@ -96,9 +98,11 @@ class DrawProfilePageViewModel private constructor() : GastonomadAppViewModel() 
     }
 
     fun setInfoForUser() {
-     //   currentUserInfo.value = DbApi().getUser(Firebase.auth.currentUser!!.uid)!!
+        if (Firebase.auth.currentUser != null) {
+            val user = DbApi().getUser(Firebase.auth.currentUser!!.uid)
+
+            if (user != null)
+                currentUserInfo.value = user
+        }
     }
-
-
-
 }
